@@ -14,6 +14,7 @@ namespace PersonClass
         public string firstName;
         public string lastName;
         public string birthYear;
+        public int idNumber;
 
         public Person()
         {
@@ -39,11 +40,18 @@ namespace PersonClass
             this.birthYear = bYear;
         }
 
-        public static int GetAge(int bYear)
+        public Person(string fName, string lName, string bYear, int idNum)
         {
-            var now = DateTime.Now;
-            var age = now.Year - bYear;
-            return age;
+            this.firstName = fName;
+            this.lastName = lName;
+            this.birthYear = bYear;
+            this.idNumber = idNum;
+        }
+
+        public static int CheckID(int idNum)
+        {
+            
+            return idNum;
         }
 
     }

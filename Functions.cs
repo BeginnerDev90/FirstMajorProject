@@ -61,10 +61,14 @@ namespace FunctionsClass
             {
                 var personFirstName = peopleList[person].firstName;
                 var personLastName = peopleList[person].lastName;
-                Console.WriteLine("{0}) " + personFirstName + " " + personLastName, num);
+                var personBirthYear = peopleList[person].birthYear;
+                var personIDNumber = peopleList[person].idNumber;
+                Console.WriteLine("{0}) Fisrt Name: " + personFirstName, num);
+                Console.WriteLine("   Last Name: " + personLastName);
+                Console.WriteLine("   Birth Year: " + personBirthYear);
+                Console.WriteLine("   ID Number: " + personIDNumber);
                 num++;
                 person++;
-                peopleName.Add(personFirstName);
             }
             Console.WriteLine("Number Of People: {0}", numOfPeople);
             Console.ReadLine();
@@ -74,19 +78,60 @@ namespace FunctionsClass
         public static void DeletePerson()
         {
             Console.Clear();
-            int personCount = peopleName.Count;
-            Console.WriteLine("Please enter the number of the person you wish to delete: ");
-            string userInput = Console.ReadLine();
-            var isNumeric = int.TryParse(userInput, out int n);
-            if (isNumeric != true)
+            int num = 1;
+            int person = 0;
+            List<int> idNumberList = new List<int>();
+            int numOfPeople = peopleList.Count;
+
+            foreach (object obj in peopleList)
             {
-                Console.WriteLine("Jesus dude. Use a damn number!");
-                DeletePerson();
+                var personFirstName = peopleList[person].firstName;
+                var personLastName = peopleList[person].lastName;
+                var personBirthYear = peopleList[person].birthYear;
+                var personIDNumber = peopleList[person].idNumber;
+                Console.WriteLine("{0}) Fisrt Name: " + personFirstName, num);
+                Console.WriteLine("   Last Name: " + personLastName);
+                Console.WriteLine("   Birth Year: " + personBirthYear);
+                Console.WriteLine("   ID Number: " + personIDNumber);
+                idNumberList.Add(personIDNumber);
+                num++;
+                person++;
             }
-            if (personCount == 0)
+            Console.WriteLine("Please enter the ID number of the person you with to delete,");
+            Console.WriteLine("or type 'q' to go back to the main menu: ");
+            string userInput = Console.ReadLine();
+            if (userInput == "q")
             {
-                Console.WriteLine("There are no people.");
                 MainMenu();
+            }
+            var isSelectionNumeric = int.TryParse(userInput, out int n);
+            int convertedInput = Convert.ToInt32(userInput);
+            int inputLength = userInput.Length;
+            foreach (Object personObject in peopleList)
+            {
+                if (idNumberList.Contains(convertedInput))
+                {
+                    var personToDelete = peopleList.Single(d => d.idNumber == convertedInput);
+                    Console.WriteLine("Person with ID number: " + convertedInput + " will be deleted. Are you sure? Y/N");
+                    string input = Console.ReadLine();
+                    if (input == "y" || input == "Y")
+                    {
+                        peopleList.Remove(personToDelete);
+                        Console.Clear();
+                        DeletePerson();
+                        break;
+                    } else
+                    {
+                        DeletePerson();
+                        break;
+                    }
+                } else if (!idNumberList.Contains(convertedInput))
+                {
+                    Console.WriteLine("There was no person associated with that ID number. Please try again.");
+                    Console.ReadLine();
+                    Console.Clear();
+                    DeletePerson();
+                }
             }
             
         }
@@ -97,14 +142,9 @@ namespace FunctionsClass
             string fName = Questions.FirstName();
             string lName = Questions.LastName();
             string bYear = Questions.BirthYear();
-            var isNumeric = int.TryParse(bYear, out int n);
-            if (isNumeric != true)
-            {
-                Console.WriteLine("Bruh... use numbers!");
-                Questions.BirthYear();
-            }
+            int idNum = Questions.IDNumber();
 
-            Person person = new Person(fName, lName, bYear);
+            Person person = new Person(fName, lName, bYear, idNum);
             peopleList.Add(person);
 
             Console.WriteLine("Please hit Enter to continue.");
